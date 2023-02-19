@@ -7,6 +7,7 @@ A music player app for Gokul Bhajan and Vedic Studies made in Flutter.
 This project is being actively developed and maintained by Kishan Rajeev.
 
 ![Screenshot_20230219-153238](https://user-images.githubusercontent.com/125786083/219973791-b7ff71fa-a903-4d3b-abdf-9ed96d32b189.jpg)
+![Screenshot_20230219-153553](https://user-images.githubusercontent.com/125786083/219973844-5fef1bb1-3a39-4747-97bf-5f7c5c99e42f.jpg)
 ![Screenshot_20230219-153249](https://user-images.githubusercontent.com/125786083/219973792-53826225-6935-4b85-9661-f2c820fc8e3a.jpg)
 ![Screenshot_20230219-153333](https://user-images.githubusercontent.com/125786083/219973793-17c5cb3b-b7e0-4711-8d6f-1d0c034ea4c5.jpg)
 ![Screenshot_20230219-153346](https://user-images.githubusercontent.com/125786083/219973795-33466b8f-24d9-44de-b195-9ec9008b00a4.jpg)
