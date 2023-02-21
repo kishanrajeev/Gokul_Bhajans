@@ -13,9 +13,9 @@ This project is being actively developed and maintained by Kishan Rajeev.
      <td>Favourites</td>
   </tr>
   <tr>
-    <td><img src="https://user-images.githubusercontent.com/125786083/219973791-b7ff71fa-a903-4d3b-abdf-9ed96d32b189.jpg"></td>
-    <td><img src="https://user-images.githubusercontent.com/125786083/219973844-5fef1bb1-3a39-4747-97bf-5f7c5c99e42f.jpg"></td>
-    <td><img src="https://user-images.githubusercontent.com/125786083/219973792-53826225-6935-4b85-9661-f2c820fc8e3a.jpg"></td>
+    <td><img src="https://user-images.githubusercontent.com/125786083/219973791-b7ff71fa-a903-4d3b-abdf-9ed96d32b189.jpg" width=270 height=580></td>
+    <td><img src="https://user-images.githubusercontent.com/125786083/219973844-5fef1bb1-3a39-4747-97bf-5f7c5c99e42f.jpg" width=270 height=580></td>
+    <td><img src="https://user-images.githubusercontent.com/125786083/219973792-53826225-6935-4b85-9661-f2c820fc8e3a.jpg" width=270 height=580></td>
   </tr>
  </table>
 
