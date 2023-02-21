@@ -8,7 +8,7 @@ This project is being actively developed and maintained by Kishan Rajeev.
 
 <table>
   <tr>
-    <td>Drawer(Default)</td>
+    <td>Drawer</td>
      <td>Home Page</td>
      <td>Favourites</td>
   </tr>
