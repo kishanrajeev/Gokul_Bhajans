@@ -16,6 +16,7 @@ import '../widgets.dart';
 import 'author_home.dart';
 import 'catagory_home.dart';
 import 'difficulty_page.dart';
+import 'downlaod.dart';
 import 'language_page.dart';
 import 'screen_home_bottomsheet.dart';
 import 'title_page.dart';
@@ -1089,6 +1090,26 @@ class ScreenHome extends StatelessWidget {
                           );
                         },
                         child: Text('Y'),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 10, right: 10),
+                      child: TextButton(
+                        style: TextButton.styleFrom(backgroundColor: kAppbarColor, foregroundColor: Colors.white),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Download()),
+                          );
+                        },
+
+                        child: Text('Download'),
                       ),
                     ),
                   ),

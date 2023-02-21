@@ -1,4 +1,4 @@
-package com.example.newmusicplayer
+package com.igokulam.gokul_bhajans
 
 import android.content.*
 import android.provider.MediaStore
