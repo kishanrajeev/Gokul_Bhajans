@@ -26,9 +26,9 @@ This project is being actively developed and maintained by Kishan Rajeev.
      <td>Catagory Example</td>
   </tr>
   <tr>
-    <td><img src="https://user-images.githubusercontent.com/125786083/219973793-17c5cb3b-b7e0-4711-8d6f-1d0c034ea4c5.jpg"></td>
-    <td><img src="https://user-images.githubusercontent.com/125786083/219973795-33466b8f-24d9-44de-b195-9ec9008b00a4.jpg"></td>
-    <td><img src="https://user-images.githubusercontent.com/125786083/219973796-e54b9d4b-253c-4c6f-a12e-a2195c41587e.jpg"></td>
+    <td><img src="https://user-images.githubusercontent.com/125786083/219973793-17c5cb3b-b7e0-4711-8d6f-1d0c034ea4c5.jpg" width=270 height=580></td>
+    <td><img src="https://user-images.githubusercontent.com/125786083/219973795-33466b8f-24d9-44de-b195-9ec9008b00a4.jpg" width=270 height=580></td>
+    <td><img src="https://user-images.githubusercontent.com/125786083/219973796-e54b9d4b-253c-4c6f-a12e-a2195c41587e.jpg" width=270 height=580></td>
   </tr>
  </table>
 
@@ -39,9 +39,9 @@ This project is being actively developed and maintained by Kishan Rajeev.
      <td>Bhajan Select Page</td>
   </tr>
   <tr>
-    <td><img src="https://user-images.githubusercontent.com/125786083/219973797-3fccdaab-b2d1-4120-9581-51e454c97d0e.jpg"></td>
-    <td><img src="https://user-images.githubusercontent.com/125786083/219973798-b5d9d30f-8e30-441f-9a0d-7c96d2899eaa.jpg"></td>
-    <td><img src="https://user-images.githubusercontent.com/125786083/219973799-fc97dda6-f791-4e93-a652-ba1bdf04a828.jpg"></td>
+    <td><img src="https://user-images.githubusercontent.com/125786083/219973797-3fccdaab-b2d1-4120-9581-51e454c97d0e.jpg" width=270 height=580></td>
+    <td><img src="https://user-images.githubusercontent.com/125786083/219973798-b5d9d30f-8e30-441f-9a0d-7c96d2899eaa.jpg" width=270 height=580></td>
+    <td><img src="https://user-images.githubusercontent.com/125786083/219973799-fc97dda6-f791-4e93-a652-ba1bdf04a828.jpg" width=270 height=580></td>
   </tr>
  </table>
  
