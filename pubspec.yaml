@@ -45,6 +45,7 @@ dependencies:
   flutter_downloader: ^1.10.2
   dio: ^5.0.0
   archive: ^3.3.6
+  flutter_archive: ^5.0.0
 
 dev_dependencies:
   flutter_test:
