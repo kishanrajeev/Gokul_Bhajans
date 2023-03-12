@@ -1,20 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../controller/splash_screen/screen_splash.dart';
 import '../../core/colors.dart';
 import '../../core/constant.dart';
+import '../home_screen/downlaod.dart';
+import '../home_screen/home_widgets.dart';
 import '../widgets.dart';
 
-class ScreenSplash extends StatelessWidget {
-  ScreenSplash({super.key});
 
-  final ScreenSplashController _screenSplashController =
-  Get.put(ScreenSplashController());
+class ScreenSplash extends StatefulWidget {
+  ScreenSplash({Key? key}) : super(key: key);
+
+  @override
+  _ScreenSplashState createState() => _ScreenSplashState();
+}
+
+class _ScreenSplashState extends State<ScreenSplash> {
+  late ScreenSplashController _screenSplashController;
+  bool _isFirstLaunch = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _screenSplashController = Get.put(ScreenSplashController());
+    _checkFirstLaunch();
+  }
+
+  Future<void> _checkFirstLaunch() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isFirstLaunch = prefs.getBool('is_first_launch') ?? true;
+    });
+    await prefs.setBool('is_first_launch', false);
+
+    if (_isFirstLaunch) {
+      // Ask for read and write permissions
+      if (!(await Permission.storage.isGranted)) {
+        await Permission.storage.request();
+      }
+      Get.off(() => DownloadPage());
+    } else {
+      await _screenSplashController.gotoHome(context);
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _screenSplashController.gotoHome(context);
-    });
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(

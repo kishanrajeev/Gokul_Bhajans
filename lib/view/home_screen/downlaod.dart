@@ -1,82 +1,149 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:archive/archive.dart';
+import 'package:external_path/external_path.dart';
+import 'package:media_scanner_scan_file/media_scanner_scan_file.dart';
 
-class Download extends StatefulWidget {
+import '../../core/colors.dart';
+
+class DownloadPage extends StatefulWidget {
+  const DownloadPage({
+    Key? key,
+  }) : super(key: key);
+
   @override
-  _DownloadState createState() => _DownloadState();
+  State<DownloadPage> createState() => _SingleDownloadScreenState();
 }
 
-class _DownloadState extends State<Download> {
-  String _filePath = '';
+class _SingleDownloadScreenState extends State<DownloadPage> {
+  final String url =
+      "https://bkdasa.synology.me:2061/gokulbhajans/data/test.zip"; // Change this to your desired URL
+  double? _progress;
+  String _status = '';
+
+  Future<void> extractZip(String filePath) async {
+    setState(() {
+      _status = 'Extracting...';
+    });
+
+    // Read the Zip file from disk.
+    final bytes = File(filePath).readAsBytesSync();
+
+    // Decode the Zip file
+    final archive = ZipDecoder().decodeBytes(bytes);
+
+    // Get the Downloads directory
+    final dirPath = await ExternalPath.getExternalStoragePublicDirectory(
+        ExternalPath.DIRECTORY_MUSIC);
+
+    // Create the GBVS folder inside the Documents folder
+    final gbvsDir = Directory('$dirPath/GokulBhajans');
+    gbvsDir.createSync();
+
+    // Extract the contents of the Zip archive to the GBVS folder.
+    for (final file in archive) {
+      final filename = file.name;
+      if (file.isFile) {
+        final data = file.content as List<int>;
+        final filePath = '$dirPath/GokulBhajans/${filename.split('/').last}';
+        File(filePath)
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(data);
+
+        try {
+          final result = await MediaScannerScanFile.scanFile(filePath);
+          print('Scan result: $result');
+          final String? mediaPath = result['filePath'] as String?;
+          print('Scanned file path: $mediaPath');
+        } catch (e) {
+          print('Error scanning file: $e');
+        }
+      }
+    }
+
+    // Delete the original zip file
+    await File(filePath).delete();
+
+    print('Extracted files to $dirPath/GokulBhajans');
+
+    setState(() {
+      _status = "";
+      _progress = null;
+    });
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Downloading Complete"),
+          content: const Text("Please restart the app now."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                exit(0);
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Download'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-              child: Text('Download File'),
-              onPressed: () {
-                downloadFile().then((filePath) {
-                  setState(() {
-                    _filePath = filePath;
-                  });
-                });
-              },
+      backgroundColor: Colors.grey[900],
+      body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Please only download the files once and do not leave the app in the middle of downloading. Do not leave this page until the app automatically exits.',
+                  style: TextStyle(fontSize: 20, color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                if (_progress != null) ...[
+                  Text(_status, style: TextStyle(color: Colors.white),),
+                  const SizedBox(height: 20),
+                  LinearProgressIndicator(value: _progress),
+                  const SizedBox(height: 20),
+                ],
+                Container(
+                  color: Colors.grey[900],
+                  child: ElevatedButton(
+                    onPressed: _progress != null
+                        ? null
+                        : () {
+                            setState(() {
+                              _status = "Downloading...";
+                            });
+                            FileDownloader.downloadFile(
+                              url: url,
+                              onProgress: (name, progress) {
+                                setState(() {
+                                  _progress = progress / 100;
+                                });
+                              },
+                              onDownloadCompleted: (value) async {
+                                print('path $value');
+                                await extractZip(value);
+                              },
+                            );
+                          },
+                    child: const Text('Download Bhajans'),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 16),
-            if (_filePath.isNotEmpty) Text('File saved to: $_filePath'),
-          ],
-        ),
-      ),
+          )),
     );
-  }
-
-  Future<String> downloadFile() async {
-    String url = 'http://drive.google.com/uc?id=1wGDrYfurNHnHyjIzsCaUy2oif3GJKlmB'; // Replace with your URL
-    String fileName = 'music.zip'; // Replace with your file name
-    String dir = (await getExternalStorageDirectory())!.path;
-    String filePath = '';
-
-    HttpClient httpClient = HttpClient();
-
-    try {
-      var request = await httpClient.getUrl(Uri.parse(url));
-      var response = await request.close();
-
-      if (response.statusCode == 200) {
-        var bytes = await consolidateHttpClientResponseBytes(response);
-        filePath = '$dir/$fileName';
-        File file = File(filePath);
-        await file.writeAsBytes(bytes);
-
-        // Extract the file
-        var archive = ZipDecoder().decodeBytes(bytes);
-        for (var file in archive) {
-          var filename = '$dir/${file.name}';
-          if (file.isFile) {
-            var outFile = File(filename);
-            outFile = await outFile.create(recursive: true);
-            await outFile.writeAsBytes(file.content as List<int>);
-          } else {
-            await Directory(filename).create(recursive: true);
-          }
-        }
-      } else {
-        filePath = 'Error code: ' + response.statusCode.toString();
-      }
-    } catch (ex) {
-      filePath = 'Can not fetch url';
-    }
-
-    return filePath;
   }
 }
