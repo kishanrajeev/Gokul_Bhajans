@@ -17,6 +17,30 @@ class _DeletePageState extends State<DeletePage> {
   String _status = '';
 
   Future<void> deleteFolder() async {
+    bool? confirmed = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Confirm Deletion"),
+          content: const Text("Are you sure you want to delete all of the downloaded files? This action cannot be undone."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("CANCEL"),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text("DELETE"),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (!confirmed!) {
+      return;
+    }
+
     setState(() {
       _status = 'Deleting...';
     });
