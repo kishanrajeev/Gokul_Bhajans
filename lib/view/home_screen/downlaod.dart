@@ -78,7 +78,7 @@ class _SingleDownloadScreenState extends State<DownloadPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Downloading Complete"),
-          content: const Text("Please restart the app now."),
+          content: const Text("Please restart the app once it exits."),
           actions: [
             TextButton(
               onPressed: () {
@@ -121,12 +121,25 @@ class _SingleDownloadScreenState extends State<DownloadPage> {
                   child: ElevatedButton(
                     onPressed: _progress != null
                         ? null
-                        : () {
+                        : () async {
                             setState(() {
                               _status = "Downloading...";
                             });
+                            final dirPath = await ExternalPath.getExternalStoragePublicDirectory(
+                                ExternalPath.DIRECTORY_MUSIC
+                            );
+                            final downPath = await ExternalPath.getExternalStoragePublicDirectory(
+                                ExternalPath.DIRECTORY_DOWNLOADS
+                            );
+                            print(downPath);
+                            final filePath = File('$downPath/GokulBhajans.zip');
+                            if (filePath.existsSync()) {
+                              await filePath.delete();
+                            }
+
                             FileDownloader.downloadFile(
                               url: url,
+                              name: 'GokulBhajans.zip',
                               onProgress: (name, progress) {
                                 setState(() {
                                   _progress = progress / 100;
