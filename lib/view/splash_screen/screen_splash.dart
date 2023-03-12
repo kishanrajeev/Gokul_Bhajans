@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -34,18 +36,44 @@ class _ScreenSplashState extends State<ScreenSplash> {
     setState(() {
       _isFirstLaunch = prefs.getBool('is_first_launch') ?? true;
     });
-    await prefs.setBool('is_first_launch', false);
 
-    if (_isFirstLaunch) {
-      // Ask for read and write permissions
-      if (!(await Permission.storage.isGranted)) {
-        await Permission.storage.request();
-      }
-      Get.off(() => InDownloadPage());
-    } else {
+// Request permission until it is granted or permanently denied
+    PermissionStatus permissionStatus = await Permission.storage.request();
+    while (permissionStatus == PermissionStatus.denied) {
+      permissionStatus = await Permission.storage.request();
+    }
+
+    if (permissionStatus == PermissionStatus.permanentlyDenied) {
+      // Permission permanently denied, prompt user to manually grant permission
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            AlertDialog(
+              title: const Text('Permissions Required'),
+              content: const Text(
+                  'Please grant storage permissions to use this app.'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('CANCEL'),
+                  onPressed: () => exit(0),
+                ),
+                TextButton(
+                  child: const Text('SETTINGS'),
+                  onPressed: () => openAppSettings(),
+                ),
+              ],
+            ),
+      );
+    }
+
+    if (!_isFirstLaunch) {
       await _screenSplashController.gotoHome(context);
+    } else {
+      Get.off(() => InDownloadPage());
+      await prefs.setBool('is_first_launch', false);
     }
   }
+
 
 
   @override

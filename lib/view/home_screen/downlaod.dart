@@ -23,6 +23,7 @@ class _SingleDownloadScreenState extends State<DownloadPage> {
   double? _progress;
   String _status = '';
 
+
   Future<void> extractZip(String filePath) async {
     setState(() {
       _status = 'Extracting...';
@@ -123,55 +124,54 @@ class _SingleDownloadScreenState extends State<DownloadPage> {
                   const SizedBox(height: 20),
                 ],
                 Container(
-                  color: Colors.grey[900],
-                  child: Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: _progress != null
-                            ? null
-                            : () async {
-                          setState(() {
-                            _status = "Downloading...";
-                          });
-                          final dirPath = await ExternalPath.getExternalStoragePublicDirectory(
-                              ExternalPath.DIRECTORY_MUSIC
-                          );
-                          final downPath = await ExternalPath.getExternalStoragePublicDirectory(
-                              ExternalPath.DIRECTORY_DOWNLOADS
-                          );
-                          print(downPath);
-                          final filePath = File('$downPath/GokulBhajans.zip');
-                          if (filePath.existsSync()) {
-                            await filePath.delete();
-                          }
+                    color: Colors.grey[900],
+                    child: Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: _progress != null
+                              ? null
+                              : () async {
+                            setState(() {
+                              _status = "Downloading...";
+                            });
+                            final dirPath = await ExternalPath.getExternalStoragePublicDirectory(
+                                ExternalPath.DIRECTORY_MUSIC
+                            );
+                            final downPath = await ExternalPath.getExternalStoragePublicDirectory(
+                                ExternalPath.DIRECTORY_DOWNLOADS
+                            );
+                            print(downPath);
+                            final filePath = File('$downPath/GokulBhajans.zip');
+                            if (filePath.existsSync()) {
+                              await filePath.delete();
+                            }
 
-                          FileDownloader.downloadFile(
-                            url: url,
-                            name: 'GokulBhajans.zip',
-                            onProgress: (name, progress) {
-                              setState(() {
-                                _progress = progress / 100;
-                              });
-                            },
-                            onDownloadCompleted: (value) async {
-                              print('path $value');
-                              await extractZip(value);
-                            },
-                          );
-                        },
-                        child: const Text('Download Bhajans'),
+                            FileDownloader.downloadFile(
+                              url: url,
+                              name: 'GokulBhajans.zip',
+                              onProgress: (name, progress) {
+                                setState(() {
+                                  _progress = progress / 100;
+                                });
+                              },
+                              onDownloadCompleted: (value) async {
+                                print('path $value');
+                                await extractZip(value);
+                              },
+                            );
+                          },
+                          child: const Text('Download Bhajans'),
 
-                      ),
-                      SizedBox(height: 30,),
-                      FloatingActionButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Icon(Icons.arrow_back),
-                      )
-
-                    ],
-                  )
+                        ),
+                        SizedBox(height: 30,),
+                        FloatingActionButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Icon(Icons.arrow_back),
+                        )
+                      ],
+                    )
 
                 ),
               ],
