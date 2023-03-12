@@ -7,6 +7,7 @@ import '../../core/colors.dart';
 import '../../core/constant.dart';
 import '../home_screen/downlaod.dart';
 import '../home_screen/home_widgets.dart';
+import '../home_screen/initial_download.dart';
 import '../widgets.dart';
 
 
@@ -40,7 +41,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
       if (!(await Permission.storage.isGranted)) {
         await Permission.storage.request();
       }
-      Get.off(() => DownloadPage());
+      Get.off(() => InDownloadPage());
     } else {
       await _screenSplashController.gotoHome(context);
     }

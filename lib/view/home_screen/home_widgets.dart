@@ -15,6 +15,7 @@ import '../screen_search/search_screen2.dart';
 import '../widgets.dart';
 import 'author_home.dart';
 import 'catagory_home.dart';
+import 'delete.dart';
 import 'difficulty_page.dart';
 import 'downlaod.dart';
 import 'language_page.dart';
@@ -600,7 +601,23 @@ class ScreenHome extends StatelessWidget {
                           );
                         },
 
-                        child: Text('Download'),
+                        child: Text('Download Files'),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 10, right: 10),
+                      child: TextButton(
+                        style: TextButton.styleFrom(backgroundColor: kAppbarColor, foregroundColor: Colors.white),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => DeletePage()),
+                          );
+                        },
+
+                        child: Text('Delete Files'),
                       ),
                     ),
                   ),
