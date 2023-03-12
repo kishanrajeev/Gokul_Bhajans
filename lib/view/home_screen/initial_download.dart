@@ -8,16 +8,16 @@ import 'package:media_scanner_scan_file/media_scanner_scan_file.dart';
 
 import '../../core/colors.dart';
 
-class DownloadPage extends StatefulWidget {
-  const DownloadPage({
+class InDownloadPage extends StatefulWidget {
+  const InDownloadPage({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<DownloadPage> createState() => _SingleDownloadScreenState();
+  State<InDownloadPage> createState() => _SingleDownloadScreenState();
 }
 
-class _SingleDownloadScreenState extends State<DownloadPage> {
+class _SingleDownloadScreenState extends State<InDownloadPage> {
   final String url =
       "https://bkdasa.synology.me:2061/gokulbhajans/data/test.zip"; // Change this to your desired URL
   double? _progress;
@@ -111,7 +111,7 @@ class _SingleDownloadScreenState extends State<DownloadPage> {
                   textAlign: TextAlign.center,
                 ),
                 const Text(
-                  'BE SURE TO DELETE ALL OF THE DOWNLOADED FILES WHEN UNINSTALLING THE APP USING THE "DELETE FILES" BUTTON',
+                  'BE SURE TO DELETE ALL FILES WHEN UNINSTALLING THE APP',
                   style: TextStyle(fontSize: 20, color: Colors.red),
                   textAlign: TextAlign.center,
                 ),
@@ -123,55 +123,48 @@ class _SingleDownloadScreenState extends State<DownloadPage> {
                   const SizedBox(height: 20),
                 ],
                 Container(
-                  color: Colors.grey[900],
-                  child: Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: _progress != null
-                            ? null
-                            : () async {
-                          setState(() {
-                            _status = "Downloading...";
-                          });
-                          final dirPath = await ExternalPath.getExternalStoragePublicDirectory(
-                              ExternalPath.DIRECTORY_MUSIC
-                          );
-                          final downPath = await ExternalPath.getExternalStoragePublicDirectory(
-                              ExternalPath.DIRECTORY_DOWNLOADS
-                          );
-                          print(downPath);
-                          final filePath = File('$downPath/GokulBhajans.zip');
-                          if (filePath.existsSync()) {
-                            await filePath.delete();
-                          }
+                    color: Colors.grey[900],
+                    child: Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: _progress != null
+                              ? null
+                              : () async {
+                            setState(() {
+                              _status = "Downloading...";
+                            });
+                            final dirPath = await ExternalPath.getExternalStoragePublicDirectory(
+                                ExternalPath.DIRECTORY_MUSIC
+                            );
+                            final downPath = await ExternalPath.getExternalStoragePublicDirectory(
+                                ExternalPath.DIRECTORY_DOWNLOADS
+                            );
+                            print(downPath);
+                            final filePath = File('$downPath/GokulBhajans.zip');
+                            if (filePath.existsSync()) {
+                              await filePath.delete();
+                            }
 
-                          FileDownloader.downloadFile(
-                            url: url,
-                            name: 'GokulBhajans.zip',
-                            onProgress: (name, progress) {
-                              setState(() {
-                                _progress = progress / 100;
-                              });
-                            },
-                            onDownloadCompleted: (value) async {
-                              print('path $value');
-                              await extractZip(value);
-                            },
-                          );
-                        },
-                        child: const Text('Download Bhajans'),
+                            FileDownloader.downloadFile(
+                              url: url,
+                              name: 'GokulBhajans.zip',
+                              onProgress: (name, progress) {
+                                setState(() {
+                                  _progress = progress / 100;
+                                });
+                              },
+                              onDownloadCompleted: (value) async {
+                                print('path $value');
+                                await extractZip(value);
+                              },
+                            );
+                          },
+                          child: const Text('Download Bhajans'),
 
-                      ),
-                      SizedBox(height: 30,),
-                      FloatingActionButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Icon(Icons.arrow_back),
-                      )
+                        ),
 
-                    ],
-                  )
+                      ],
+                    )
 
                 ),
               ],
