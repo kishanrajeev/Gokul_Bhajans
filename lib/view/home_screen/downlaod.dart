@@ -98,85 +98,86 @@ class _SingleDownloadScreenState extends State<DownloadPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Center(child: Text('GokulBhajans Downloader')),
+        backgroundColor: Colors.grey[900],
+      ),
       backgroundColor: Colors.grey[900],
       body: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Please only download the files once and do not leave the app in the middle of downloading. '
-                      'Do not leave this page until the app automatically exits.',
-                  style: TextStyle(fontSize: 20, color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-                const Text(
-                  'BE SURE TO DELETE ALL OF THE DOWNLOADED FILES WHEN UNINSTALLING THE APP USING THE "DELETE FILES" BUTTON',
-                  style: TextStyle(fontSize: 20, color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                if (_progress != null) ...[
-                  Text(_status, style: TextStyle(color: Colors.white),),
-                  const SizedBox(height: 20),
-                  LinearProgressIndicator(value: _progress),
-                  const SizedBox(height: 20),
-                ],
-                Container(
-                    color: Colors.grey[900],
-                    child: Column(
-                      children: [
-                        ElevatedButton(
-                          onPressed: _progress != null
-                              ? null
-                              : () async {
-                            setState(() {
-                              _status = "Downloading...";
-                            });
-                            final dirPath = await ExternalPath.getExternalStoragePublicDirectory(
-                                ExternalPath.DIRECTORY_MUSIC
-                            );
-                            final downPath = await ExternalPath.getExternalStoragePublicDirectory(
-                                ExternalPath.DIRECTORY_DOWNLOADS
-                            );
-                            print(downPath);
-                            final filePath = File('$downPath/GokulBhajans.zip');
-                            if (filePath.existsSync()) {
-                              await filePath.delete();
-                            }
-
-                            FileDownloader.downloadFile(
-                              url: url,
-                              name: 'GokulBhajans.zip',
-                              onProgress: (name, progress) {
-                                setState(() {
-                                  _progress = progress / 100;
-                                });
-                              },
-                              onDownloadCompleted: (value) async {
-                                print('path $value');
-                                await extractZip(value);
-                              },
-                            );
-                          },
-                          child: const Text('Download Bhajans'),
-
-                        ),
-                        SizedBox(height: 30,),
-                        FloatingActionButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Icon(Icons.arrow_back),
-                        )
+        padding: const EdgeInsets.all(16),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Card(
+                color: Colors.grey[800],
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Please do not leave the app before the downloading bar disappears. It may appear to be stuck, but please be patient.',
+                        style: TextStyle(fontSize: 20, color: Colors.red),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        'Please be sure to use the "Delete Files" Button before permanently uninstalling the app to delete the music files and save storage.',
+                        style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 20),
+                      if (_progress != null) ...[
+                        Text(_status, style: TextStyle(color: Colors.white),),
+                        const SizedBox(height: 20),
+                        LinearProgressIndicator(value: _progress),
+                        const SizedBox(height: 20),
                       ],
-                    )
+                      ElevatedButton(
+                        onPressed: _progress != null
+                            ? null
+                            : () async {
+                          setState(() {
+                            _status = "Downloading...";
+                          });
+                          final dirPath = await ExternalPath
+                              .getExternalStoragePublicDirectory(
+                              ExternalPath.DIRECTORY_MUSIC
+                          );
+                          final downPath = await ExternalPath
+                              .getExternalStoragePublicDirectory(
+                              ExternalPath.DIRECTORY_DOWNLOADS
+                          );
+                          print(downPath);
+                          final filePath = File('$downPath/GokulBhajans.zip');
+                          if (filePath.existsSync()) {
+                            await filePath.delete();
+                          }
 
+                          FileDownloader.downloadFile(
+                            url: url,
+                            name: 'GokulBhajans.zip',
+                            onProgress: (name, progress) {
+                              setState(() {
+                                _progress = progress / 100;
+                              });
+                            },
+                            onDownloadCompleted: (value) async {
+                              print('path $value');
+                              await extractZip(value);
+                            },
+                          );
+                        },
+                        child: const Text('Download Bhajans'),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          )),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
