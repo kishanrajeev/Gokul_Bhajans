@@ -19,7 +19,7 @@ class InDownloadPage extends StatefulWidget {
 
 class _SingleDownloadScreenState extends State<InDownloadPage> {
   final String url =
-      "https://bkdasa.synology.me:2061/gokulbhajans/data/test.zip"; // Change this to your desired URL
+      "https://bkdasa.synology.me:2061/gokulbhajans/data/bhajans.zip"; // Change this to your desired URL
   double? _progress;
   String _status = '';
 
