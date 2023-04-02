@@ -18,8 +18,8 @@ class InDownloadPage extends StatefulWidget {
 }
 
 class _SingleDownloadScreenState extends State<InDownloadPage> {
-  final String url =
-      "https://bkdasa.synology.me:2061/gokulbhajans/data/bhajans.zip"; // Change this to your desired URL
+  final List<String> urls = [
+      "https://bkdasa.synology.me:2061/gokulbhajans/data/test.zip", "https://bkdasa.synology.me:2061/gokulbhajans/data/test.zip"]; // Change this to your desired URL
   double? _progress;
   String _status = '';
 
@@ -47,12 +47,17 @@ class _SingleDownloadScreenState extends State<InDownloadPage> {
       final filename = file.name;
       if (file.isFile) {
         final data = file.content as List<int>;
-        final filePath = '$dirPath/GokulBhajans/${filename
-            .split('/')
-            .last}';
-        File(filePath)
-          ..createSync(recursive: true)
-          ..writeAsBytesSync(data);
+        final chunks = <Uint8List>[];
+        final chunkSize = 1024 * 1024;
+        var offset = 0;
+        while (offset < data.length) {
+          final chunk = Uint8List.fromList(
+              data.sublist(offset, offset + chunkSize > data.length ? data.length : offset + chunkSize));
+          chunks.add(chunk);
+          offset += chunk.lengthInBytes;
+        }
+        final filePath = '$dirPath/GokulBhajans/${filename.split('/').last}';
+        await File(filePath).writeAsBytes(chunks.expand((x) => x).toList());
 
         try {
           final result = await MediaScannerScanFile.scanFile(filePath);
@@ -140,33 +145,32 @@ class _SingleDownloadScreenState extends State<InDownloadPage> {
                           setState(() {
                             _status = "Downloading...";
                           });
-                          final dirPath = await ExternalPath
-                              .getExternalStoragePublicDirectory(
-                              ExternalPath.DIRECTORY_MUSIC
-                          );
-                          final downPath = await ExternalPath
-                              .getExternalStoragePublicDirectory(
-                              ExternalPath.DIRECTORY_DOWNLOADS
-                          );
+                          final dirPath = await ExternalPath.getExternalStoragePublicDirectory(
+                              ExternalPath.DIRECTORY_MUSIC);
+                          final downPath = await ExternalPath.getExternalStoragePublicDirectory(
+                              ExternalPath.DIRECTORY_DOWNLOADS);
                           print(downPath);
-                          final filePath = File('$downPath/GokulBhajans.zip');
-                          if (filePath.existsSync()) {
-                            await filePath.delete();
-                          }
 
-                          FileDownloader.downloadFile(
-                            url: url,
-                            name: 'GokulBhajans.zip',
-                            onProgress: (name, progress) {
-                              setState(() {
-                                _progress = progress / 100;
-                              });
-                            },
-                            onDownloadCompleted: (value) async {
-                              print('path $value');
-                              await extractZip(value);
-                            },
-                          );
+                          for (String url in urls) {
+                            final filePath = File('$downPath/GokulBhajans.zip');
+                            if (filePath.existsSync()) {
+                              await filePath.delete();
+                            }
+
+                            FileDownloader.downloadFile(
+                              url: url,
+                              name: 'GokulBhajans.zip',
+                              onProgress: (name, progress) {
+                                setState(() {
+                                  _progress = progress / 100;
+                                });
+                              },
+                              onDownloadCompleted: (value) async {
+                                print('path $value');
+                                await extractZip(value);
+                              },
+                            );
+                          }
                         },
                         child: const Text('Download Bhajans'),
                       ),
