@@ -22,10 +22,12 @@ class _SingleDownloadScreenState extends State<InDownloadPage> {
       "https://bkdasa.synology.me:2061/gokulbhajans/data/test.zip", "https://bkdasa.synology.me:2061/gokulbhajans/data/test.zip"]; // Change this to your desired URL
   double? _progress;
   String _status = '';
-
+  int testnum = 1;
+  int amountofurls = 2;
   Future<void> extractZip(String filePath) async {
     setState(() {
       _status = 'Extracting...';
+      _progress = 75;
     });
 
     // Read the Zip file from disk.
@@ -66,18 +68,48 @@ class _SingleDownloadScreenState extends State<InDownloadPage> {
           print('Scanned file path: $mediaPath');
         } catch (e) {
           print('Error scanning file: $e');
+          setState(() {
+            _status = 'Scanning...';
+          });
+
         }
       }
+    }
+    if (testnum == amountofurls) {
+      print('Test number: $testnum COMPLETED');
+      setState(() {
+        _status = "DOWNLOAD COMPLETE";
+        _progress = 100;
+      });
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Downloading Complete"),
+            content:
+            const Text("Please restart the app once it exits."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  exit(0);
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+
+    } else {
+      testnum = testnum + 1;
+      print('Test number: $testnum');
+
     }
 
     // Delete the original zip file
     await File(filePath).delete();
     print('Extracted files to $dirPath/GokulBhajans');
 
-    setState(() {
-      _status = "";
-      _progress = null;
-    });
   }
 
 
@@ -135,7 +167,10 @@ class _SingleDownloadScreenState extends State<InDownloadPage> {
                           for (String url in urls) {
                             final filePath = File('$downPath/GokulBhajans.zip');
                             if (filePath.existsSync()) {
-                              await filePath.delete();
+                              try {
+                                await filePath.delete();
+                              } catch (e) {
+                              }
                             }
 
                             await FileDownloader.downloadFile(
@@ -148,7 +183,6 @@ class _SingleDownloadScreenState extends State<InDownloadPage> {
                               },
                               onDownloadCompleted: (value) async {
                                 print('path $value');
-                                print("ITS DONE BRO");
                                 await extractZip(value);
 
                               },
@@ -156,24 +190,7 @@ class _SingleDownloadScreenState extends State<InDownloadPage> {
                           }
 
                           // Show the dialog after all extractions have been completed
-                          await showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text("Downloading Complete"),
-                                content:
-                                const Text("Please restart the app once it exits."),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      exit(0);
-                                    },
-                                    child: const Text("OK"),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+
                         },
                         child: const Text('Download Bhajans'),
                       ),
