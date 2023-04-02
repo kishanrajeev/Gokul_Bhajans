@@ -72,31 +72,12 @@ class _SingleDownloadScreenState extends State<InDownloadPage> {
 
     // Delete the original zip file
     await File(filePath).delete();
-
     print('Extracted files to $dirPath/GokulBhajans');
 
     setState(() {
       _status = "";
       _progress = null;
     });
-
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Downloading Complete"),
-          content: const Text("Please restart the app once it exits."),
-          actions: [
-            TextButton(
-              onPressed: () {
-                exit(0);
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
   }
 
 
@@ -157,7 +138,7 @@ class _SingleDownloadScreenState extends State<InDownloadPage> {
                               await filePath.delete();
                             }
 
-                            FileDownloader.downloadFile(
+                            await FileDownloader.downloadFile(
                               url: url,
                               name: 'GokulBhajans.zip',
                               onProgress: (name, progress) {
@@ -167,10 +148,33 @@ class _SingleDownloadScreenState extends State<InDownloadPage> {
                               },
                               onDownloadCompleted: (value) async {
                                 print('path $value');
+                                print("ITS DONE BRO");
                                 await extractZip(value);
+                                await extractZip(value);
+
                               },
                             );
                           }
+
+                          // Show the dialog after all extractions have been completed
+                          await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text("Downloading Complete"),
+                                content:
+                                const Text("Please restart the app once it exits."),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      exit(0);
+                                    },
+                                    child: const Text("OK"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         child: const Text('Download Bhajans'),
                       ),
@@ -184,4 +188,5 @@ class _SingleDownloadScreenState extends State<InDownloadPage> {
       ),
     );
   }
+
 }
