@@ -150,7 +150,6 @@ class _SingleDownloadScreenState extends State<InDownloadPage> {
                                 print('path $value');
                                 print("ITS DONE BRO");
                                 await extractZip(value);
-                                await extractZip(value);
 
                               },
                             );
