@@ -18,15 +18,16 @@ class DownloadPage extends StatefulWidget {
 }
 
 class _SingleDownloadScreenState extends State<DownloadPage> {
-  final String url =
-      "https://bkdasa.synology.me:2061/gokulbhajans/data/bhajans.zip"; // Change this to your desired URL
+  final List<String> urls = [
+    "https://bkdasa.synology.me:2061/gokulbhajans/data/test.zip", "https://bkdasa.synology.me:2061/gokulbhajans/data/test.zip"]; // Change this to your desired URL
   double? _progress;
   String _status = '';
-
-
+  int testnum = 1;
+  int amountofurls = 2;
   Future<void> extractZip(String filePath) async {
     setState(() {
       _status = 'Extracting...';
+      _progress = 75;
     });
 
     // Read the Zip file from disk.
@@ -48,10 +49,17 @@ class _SingleDownloadScreenState extends State<DownloadPage> {
       final filename = file.name;
       if (file.isFile) {
         final data = file.content as List<int>;
+        final chunks = <Uint8List>[];
+        final chunkSize = 1024 * 1024;
+        var offset = 0;
+        while (offset < data.length) {
+          final chunk = Uint8List.fromList(
+              data.sublist(offset, offset + chunkSize > data.length ? data.length : offset + chunkSize));
+          chunks.add(chunk);
+          offset += chunk.lengthInBytes;
+        }
         final filePath = '$dirPath/GokulBhajans/${filename.split('/').last}';
-        File(filePath)
-          ..createSync(recursive: true)
-          ..writeAsBytesSync(data);
+        await File(filePath).writeAsBytes(chunks.expand((x) => x).toList());
 
         try {
           final result = await MediaScannerScanFile.scanFile(filePath);
@@ -60,39 +68,49 @@ class _SingleDownloadScreenState extends State<DownloadPage> {
           print('Scanned file path: $mediaPath');
         } catch (e) {
           print('Error scanning file: $e');
+          setState(() {
+            _status = 'Scanning...';
+          });
+
         }
       }
+    }
+    if (testnum == amountofurls) {
+      print('Test number: $testnum COMPLETED');
+      setState(() {
+        _status = "DOWNLOAD COMPLETE";
+        _progress = 100;
+      });
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Downloading Complete"),
+            content:
+            const Text("Please restart the app once it exits."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  exit(0);
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+
+    } else {
+      testnum = testnum + 1;
+      print('Test number: $testnum');
+
     }
 
     // Delete the original zip file
     await File(filePath).delete();
-
     print('Extracted files to $dirPath/GokulBhajans');
 
-    setState(() {
-      _status = "";
-      _progress = null;
-    });
-
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Downloading Complete"),
-          content: const Text("Please restart the app once it exits."),
-          actions: [
-            TextButton(
-              onPressed: () {
-                exit(0);
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
   }
-
 
 
   @override
@@ -122,7 +140,7 @@ class _SingleDownloadScreenState extends State<DownloadPage> {
                       ),
                       const SizedBox(height: 20),
                       const Text(
-                        'Please be sure to use the "Delete Files" Button before permanently uninstalling the app to delete the music files and save storage.',
+                        'Please be sure to use the "Delete Files" Button before permanently uninstalling the app to delete the music files and save storage.' ,
                         style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
@@ -140,33 +158,39 @@ class _SingleDownloadScreenState extends State<DownloadPage> {
                           setState(() {
                             _status = "Downloading...";
                           });
-                          final dirPath = await ExternalPath
-                              .getExternalStoragePublicDirectory(
-                              ExternalPath.DIRECTORY_MUSIC
-                          );
-                          final downPath = await ExternalPath
-                              .getExternalStoragePublicDirectory(
-                              ExternalPath.DIRECTORY_DOWNLOADS
-                          );
+                          final dirPath = await ExternalPath.getExternalStoragePublicDirectory(
+                              ExternalPath.DIRECTORY_MUSIC);
+                          final downPath = await ExternalPath.getExternalStoragePublicDirectory(
+                              ExternalPath.DIRECTORY_DOWNLOADS);
                           print(downPath);
-                          final filePath = File('$downPath/GokulBhajans.zip');
-                          if (filePath.existsSync()) {
-                            await filePath.delete();
+
+                          for (String url in urls) {
+                            final filePath = File('$downPath/GokulBhajans.zip');
+                            if (filePath.existsSync()) {
+                              try {
+                                await filePath.delete();
+                              } catch (e) {
+                              }
+                            }
+
+                            await FileDownloader.downloadFile(
+                              url: url,
+                              name: 'GokulBhajans.zip',
+                              onProgress: (name, progress) {
+                                setState(() {
+                                  _progress = progress / 100;
+                                });
+                              },
+                              onDownloadCompleted: (value) async {
+                                print('path $value');
+                                await extractZip(value);
+
+                              },
+                            );
                           }
 
-                          FileDownloader.downloadFile(
-                            url: url,
-                            name: 'GokulBhajans.zip',
-                            onProgress: (name, progress) {
-                              setState(() {
-                                _progress = progress / 100;
-                              });
-                            },
-                            onDownloadCompleted: (value) async {
-                              print('path $value');
-                              await extractZip(value);
-                            },
-                          );
+                          // Show the dialog after all extractions have been completed
+
                         },
                         child: const Text('Download Bhajans'),
                       ),
@@ -180,4 +204,5 @@ class _SingleDownloadScreenState extends State<DownloadPage> {
       ),
     );
   }
+
 }
