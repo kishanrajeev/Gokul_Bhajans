@@ -19,11 +19,26 @@ class InDownloadPage extends StatefulWidget {
 
 class _SingleDownloadScreenState extends State<InDownloadPage> {
   final List<String> urls = [
-      "https://bkdasa.synology.me:2061/gokulbhajans/data/test.zip", "https://bkdasa.synology.me:2061/gokulbhajans/data/test.zip"]; // Change this to your desired URL
+    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114910&authkey=AOtKN7rQOBPVe9A", // URL 1
+    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114911&authkey=ABcUkgf9iMpAZ_k", // URL 2
+    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114909&authkey=AO_DEAyqrBTzlF8", // URL 3
+    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114912&authkey=ADPG7V9RFoNxEZo", // URL 4
+    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114917&authkey=AAWmZ9Wvk4N4KaE", // URL 5
+    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114914&authkey=AM3KvAXPK24AxX0", // URL 6
+    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114913&authkey=APX-98VFTzEY5qY", // URL 7
+    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114915&authkey=ANaImqZ2FPiIDM4", // URL 8
+    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114918&authkey=AGUvylyFEj6uigU", // URL 9
+    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114916&authkey=APrUFYmyhds1u8M", // URL 10
+  ]; // URLs to download
   double? _progress;
   String _status = '';
   int testnum = 1;
-  int amountofurls = 2;
+  int amountofurls = 0; // number of URLs in the list will be automatically detected later
+  @override
+  void initState() {
+    super.initState();
+    amountofurls = urls.length;
+  }
   Future<void> extractZip(String filePath) async {
     setState(() {
       _status = 'Extracting...';
@@ -112,7 +127,6 @@ class _SingleDownloadScreenState extends State<InDownloadPage> {
 
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -168,6 +182,7 @@ class _SingleDownloadScreenState extends State<InDownloadPage> {
                             final filePath = File('$downPath/GokulBhajans.zip');
                             if (filePath.existsSync()) {
                               try {
+                                //await MediaScannerScanFile.scanFile('$downPath/GokulBhajans.zip');
                                 await filePath.delete();
                               } catch (e) {
                               }
