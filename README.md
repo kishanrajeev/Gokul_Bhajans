@@ -45,4 +45,10 @@ This project is being actively developed and maintained by Kishan Rajeev.
   </tr>
  </table>
  
+## Contact
 
+* [Kishan Rajeev](https://kishan.knowledgeplatter.com/)
+
+## License
+
+SmartSnap is licensed under the MIT License.
