@@ -22,7 +22,7 @@ class ScreenSplash extends StatefulWidget {
 
 class _ScreenSplashState extends State<ScreenSplash> {
   late ScreenSplashController _screenSplashController;
-  bool _isFirstLaunch = true;
+  bool _isFirstLaunch = false;
 
   @override
   void initState() {
