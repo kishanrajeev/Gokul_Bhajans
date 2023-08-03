@@ -112,7 +112,7 @@ class _PlayContainerState extends State<PlayContainer> {
                       height: Get.height * 0.40,
                       child: SingleChildScrollView(
                         child: Text(
-                          textData,
+                          '$textData',
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
