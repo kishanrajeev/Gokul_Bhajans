@@ -46,9 +46,13 @@ class _AuthorPageState extends State<AuthorHome> {
           return Column(
             children: [
               SizedBox(height: 20), // Add a 20-pixel gap at the top
-              Padding(padding: EdgeInsets.symmetric(horizontal: 40),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Container(
-                  decoration: BoxDecoration(color: kAppbarColor),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: kAppbarColor,
+                  ),
                   alignment: Alignment.center,
                   child: ListTile(
                     title: Center(
@@ -58,8 +62,7 @@ class _AuthorPageState extends State<AuthorHome> {
                           color: Colors.white,
                         ),
                       ),
-                    )
-                    ,
+                    ),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -75,7 +78,8 @@ class _AuthorPageState extends State<AuthorHome> {
                       );
                     },
                   ),
-                ),),
+                ),
+              ),
             ],
           );
 

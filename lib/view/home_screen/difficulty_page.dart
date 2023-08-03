@@ -22,7 +22,7 @@ class _DifficultyPageState extends State<DifficultyHome> {
       List<dynamic> songsJson = json.decode(data) as List<dynamic>;
       _songs = List<dynamic>.from(songsJson);
       _jsonstr = _songs
-          .map((song) => song["LANGUAGE"] as String)
+          .map((song) => song["GRADE"] as String)
           .toSet()
           .toList();
       _jsonstr.sort();
@@ -46,36 +46,40 @@ class _DifficultyPageState extends State<DifficultyHome> {
           return Column(
             children: [
               SizedBox(height: 20), // Add a 20-pixel gap at the top
-              Padding(padding: EdgeInsets.symmetric(horizontal: 40),
-              child: Container(
-                decoration: BoxDecoration(color: kAppbarColor),
-                alignment: Alignment.center,
-                child: ListTile(
-                  title: Center(
-                    child: Text(
-                      _jsonstr[index],
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  )
-                  ,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SongsPage(
-                          key: UniqueKey(),
-                          jsonstr: _jsonstr[index],
-                          songs: _songs
-                              .where((song) => song["LANGUAGE"] == _jsonstr[index])
-                              .toList(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: kAppbarColor,
+                  ),
+                  alignment: Alignment.center,
+                  child: ListTile(
+                    title: Center(
+                      child: Text(
+                        _jsonstr[index],
+                        style: TextStyle(
+                          color: Colors.white,
                         ),
                       ),
-                    );
-                  },
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SongsPage(
+                            key: UniqueKey(),
+                            jsonstr: _jsonstr[index],
+                            songs: _songs
+                                .where((song) => song["GRADE"] == _jsonstr[index])
+                                .toList(),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),),
+              ),
             ],
           );
 

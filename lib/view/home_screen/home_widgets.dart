@@ -40,15 +40,20 @@ class ScreenHome extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 10, right: 10),
-                child: TextButton(
-                  style: TextButton.styleFrom(backgroundColor: kAppbarColor, foregroundColor: Colors.white),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: kAppbarColor,
+                    onPrimary: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => DownloadPage()),
                     );
                   },
-
                   child: Text('Please Download The Bhajans First'),
                 ),
               ),
@@ -68,8 +73,14 @@ class ScreenHome extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 10, right: 10),
-                      child: TextButton(
-                        style: TextButton.styleFrom(backgroundColor: kAppbarColor, foregroundColor: Colors.white),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: kAppbarColor,
+                          onPrimary: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -83,8 +94,14 @@ class ScreenHome extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 10, right: 10),
-                      child: TextButton(
-                        style: TextButton.styleFrom(backgroundColor: kAppbarColor, foregroundColor: Colors.white),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: kAppbarColor,
+                          onPrimary: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -103,8 +120,14 @@ class ScreenHome extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 10, right: 10),
-                      child: TextButton(
-                        style: TextButton.styleFrom(backgroundColor: kAppbarColor, foregroundColor: Colors.white),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: kAppbarColor,
+                          onPrimary: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -118,8 +141,14 @@ class ScreenHome extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 10, right: 10),
-                      child: TextButton(
-                        style: TextButton.styleFrom(backgroundColor: kAppbarColor, foregroundColor: Colors.white),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: kAppbarColor,
+                          onPrimary: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -138,8 +167,14 @@ class ScreenHome extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 10, right: 10),
-                      child: TextButton(
-                        style: TextButton.styleFrom(backgroundColor: kAppbarColor, foregroundColor: Colors.white),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: kAppbarColor,
+                          onPrimary: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -153,8 +188,14 @@ class ScreenHome extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 10, right: 10),
-                      child: TextButton(
-                        style: TextButton.styleFrom(backgroundColor: kAppbarColor, foregroundColor: Colors.white),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: kAppbarColor,
+                          onPrimary: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -592,15 +633,20 @@ class ScreenHome extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 10, right: 10),
-                      child: TextButton(
-                        style: TextButton.styleFrom(backgroundColor: kAppbarColor, foregroundColor: Colors.white),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: kAppbarColor,
+                          onPrimary: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => DownloadPage()),
                           );
                         },
-
                         child: Text('Download Files'),
                       ),
                     ),
@@ -608,15 +654,20 @@ class ScreenHome extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 10, right: 10),
-                      child: TextButton(
-                        style: TextButton.styleFrom(backgroundColor: kAppbarColor, foregroundColor: Colors.white),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: kAppbarColor,
+                          onPrimary: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => DeletePage()),
                           );
                         },
-
                         child: Text('Delete Files'),
                       ),
                     ),

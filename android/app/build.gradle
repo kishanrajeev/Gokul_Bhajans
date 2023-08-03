@@ -27,9 +27,16 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 def keystoreProperties = new Properties()
    def keystorePropertiesFile = rootProject.file('key.properties')
-   if (keystorePropertiesFile.exists()) {
-       keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-   }
+    // Update the keystore file path for Linux
+    if (keystorePropertiesFile.exists()) {
+        String storeFilePath = keystoreProperties['storeFile']
+        if (storeFilePath != null) {
+            storeFilePath = storeFilePath.replace("C://", "/mnt/c/")
+            storeFilePath = storeFilePath.replace("//", "/")
+            keystoreProperties['storeFile'] = storeFilePath
+        }
+    }
+
 
 android {
     compileSdkVersion 33
@@ -59,6 +66,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
+
     }
 signingConfigs {
        release {
