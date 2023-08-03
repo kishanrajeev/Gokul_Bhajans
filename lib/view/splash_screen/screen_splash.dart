@@ -7,8 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../controller/splash_screen/screen_splash.dart';
 import '../../core/colors.dart';
 import '../../core/constant.dart';
-import '../home_screen/downlaod.dart';
-import '../home_screen/home_widgets.dart';
 import '../home_screen/initial_download.dart';
 import '../widgets.dart';
 
