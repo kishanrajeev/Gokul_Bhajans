@@ -60,7 +60,15 @@ class _PlayContainerState extends State<PlayContainer> {
     String first4 = title!.substring(0, 4);
     String textData =
     await DefaultAssetBundle.of(context).loadString('assets/bhajan-lyrics/$first4.txt');
+    print('KYS $textData');
     return textData;
+  }
+
+  void someFunction() async {
+    String updatedTextData = await loadTextData(context);
+    setState(() {
+      textDataFuture = Future.value(updatedTextData);
+    });
   }
 
 
@@ -74,190 +82,198 @@ class _PlayContainerState extends State<PlayContainer> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
-      future: textDataFuture, // Use the pre-loaded future
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else {
-          String textData = snapshot.data!;
-          String? title = realtimePlayingInfos1!.current!.audio.audio.metas.title.toString();
-          String first4 = title!.substring(0, 4);
-          return SizedBox(
-            height: Get.height,
-            width: Get.width,
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: Get.height * 0.05,
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 15,
-                          blurRadius: 30,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
+        future: textDataFuture, // Use the pre-loaded future
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+
+            return SizedBox(
+              height: Get.height,
+              width: Get.width,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: Get.height * 0.05,
                     ),
-                    child: Container(
-                      width: Get.width * 0.85,
-                      height: Get.height * 0.40,
-                      child: SingleChildScrollView(
-                        child: Text(
-                          textData,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 15,
+                            blurRadius: 30,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Container(
+                        width: Get.width * 0.85,
+                        height: Get.height * 0.40,
+                        child: SingleChildScrollView(
+                          child: Text(
+                            snapshot.data! as String,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.05,
-                  ),
-                  Container(
-                      height: Get.height * 0.03,
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 7),
-                      child: _buildMarquee(
-                        realtimePlayingInfos1!.current!.audio.audio.metas
-                            .title
-                            .toString(),
-                      )),
-                  SizedBox(
-                    height: Get.height * 0.02,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      IconButton(
-                          onPressed: () {
-                            if (tempFavouriteList.contains(
+                    SizedBox(
+                      height: Get.height * 0.05,
+                    ),
+                    Container(
+                        height: Get.height * 0.03,
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 7),
+                        child: _buildMarquee(
+                          realtimePlayingInfos1!.current!.audio.audio.metas
+                              .title
+                              .toString(),
+                        )),
+                    SizedBox(
+                      height: Get.height * 0.02,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        IconButton(
+                            onPressed: () {
+                              if (tempFavouriteList.contains(
+                                  realtimePlayingInfos1!
+                                      .current!.audio.audio.metas.id)) {
+                                favouritesController.favouritesRemove(
+                                    realtimePlayingInfos1!.current!.audio.audio
+                                        .metas.id
+                                        .toString());
+                              } else {
+                                favouritesController.addFavouritesToDB(
+                                    realtimePlayingInfos1!.current!.audio.audio
+                                        .metas.id
+                                        .toString());
+                              }
+                            },
+                            icon: tempFavouriteList.contains(
                                 realtimePlayingInfos1!
-                                    .current!.audio.audio.metas.id)) {
-                              favouritesController.favouritesRemove(
-                                  realtimePlayingInfos1!.current!.audio.audio
-                                      .metas.id
-                                      .toString());
+                                    .current!.audio.audio.metas.id)
+                                ? functionIcon(Icons.favorite, 30, kRoseColor)
+                                : functionIcon(
+                                Icons.favorite, 30, Colors.white)),
+                        IconButton(
+                          onPressed: () {
+                            if (screenPlayController.loopButton.value) {
+                              audioPlayer.setLoopMode(LoopMode.single);
+                              screenPlayController.loopButton.value = false;
                             } else {
-                              favouritesController.addFavouritesToDB(
-                                  realtimePlayingInfos1!.current!.audio.audio
-                                      .metas.id
-                                      .toString());
+                              audioPlayer.setLoopMode(LoopMode.none);
+                              screenPlayController.loopButton.value = true;
                             }
                           },
-                          icon: tempFavouriteList.contains(
-                              realtimePlayingInfos1!
-                                  .current!.audio.audio.metas.id)
-                              ? functionIcon(Icons.favorite, 30, kRoseColor)
-                              : functionIcon(
-                              Icons.favorite, 30, Colors.white)),
-                      IconButton(
-                        onPressed: () {
-                          if (screenPlayController.loopButton.value) {
-                            audioPlayer.setLoopMode(LoopMode.single);
-                            screenPlayController.loopButton.value = false;
-                          } else {
-                            audioPlayer.setLoopMode(LoopMode.none);
-                            screenPlayController.loopButton.value = true;
-                          }
-                        },
-                        icon: Obx(
-                              () {
-                            return screenPlayController.loopButton.value
-                                ? functionIcon(Icons.repeat, 35, kWhiteColor)
-                                : functionIcon(
-                                Icons.repeat_one, 35, kWhiteColor);
-                          },
+                          icon: Obx(
+                                () {
+                              return screenPlayController.loopButton.value
+                                  ? functionIcon(Icons.repeat, 35, kWhiteColor)
+                                  : functionIcon(
+                                  Icons.repeat_one, 35, kWhiteColor);
+                            },
+                          ),
                         ),
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            showModalBottomSheet(
-                                backgroundColor: kBackgroundColor2,
-                                context: context,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(30),
+                        IconButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  backgroundColor: kBackgroundColor2,
+                                  context: context,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(30),
+                                    ),
                                   ),
-                                ),
-                                builder: (BuildContext context) {
-                                  return ScreenAddToPlaylistFromHome(
-                                    id: realtimePlayingInfos1!
-                                        .current!.audio.audio.metas.id
-                                        .toString(),
-                                  );
-                                });
+                                  builder: (BuildContext context) {
+                                    return ScreenAddToPlaylistFromHome(
+                                      id: realtimePlayingInfos1!
+                                          .current!.audio.audio.metas.id
+                                          .toString(),
+                                    );
+                                  });
+                            },
+                            icon: functionIcon(
+                                Icons.playlist_play, 35, kWhiteColor))
+                      ],
+                    ),
+                    slider(realtimePlayingInfos1!),
+                    Container(
+                      transform: Matrix4.translationValues(0, -5, 0),
+                      margin: const EdgeInsets.fromLTRB(5, 0, 5, 15),
+                      child: timeStamps(realtimePlayingInfos1!),
+                    ),
+                    SizedBox(
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.03,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () async {
+                            if (songSkip) {
+                              songSkip = false;
+                              await audioPlayer.previous();
+                              songSkip = true;
+                              await loadTextData(context);
+                              someFunction();
+                              setState(() {
+
+                              });
+                            }
                           },
-                          icon: functionIcon(
-                              Icons.playlist_play, 35, kWhiteColor))
-                    ],
-                  ),
-                  slider(realtimePlayingInfos1!),
-                  Container(
-                    transform: Matrix4.translationValues(0, -5, 0),
-                    margin: const EdgeInsets.fromLTRB(5, 0, 5, 15),
-                    child: timeStamps(realtimePlayingInfos1!),
-                  ),
-                  SizedBox(
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.03,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () async {
-                          if (songSkip) {
-                            songSkip = false;
-                            await audioPlayer.previous();
-                            songSkip = true;
-                          }
-                        },
-                        child: functionIcon(
-                            Icons.skip_previous, 55, Colors.white),
-                      ),
-                      GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          audioPlayer.playOrPause();
-                        },
-                        child: realtimePlayingInfos1!.isPlaying
-                            ? functionIcon(Icons.pause, 55, Colors.white)
-                            : functionIcon(
-                            Icons.play_arrow_rounded, 55, Colors.white),
-                      ),
-                      GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () async {
-                          if (songSkip) {
-                            songSkip = false;
-                            await audioPlayer.next();
-                            songSkip = true;
-                          }
-                        },
-                        child: functionIcon(
-                            Icons.skip_next, 55, Colors.white),
-                      ),
-                    ],
-                  )
-                ],
+                          child: functionIcon(
+                              Icons.skip_previous, 55, Colors.white),
+                        ),
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            audioPlayer.playOrPause();
+                          },
+                          child: realtimePlayingInfos1!.isPlaying
+                              ? functionIcon(Icons.pause, 55, Colors.white)
+                              : functionIcon(
+                              Icons.play_arrow_rounded, 55, Colors.white),
+                        ),
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () async {
+                            if (songSkip) {
+                              songSkip = false;
+                              await audioPlayer.next();
+                              songSkip = true;
+                              await loadTextData(context);
+                              someFunction();
+                              setState(() {
+
+                              });
+                            }
+                          },
+                          child: functionIcon(
+                              Icons.skip_next, 55, Colors.white),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
-        }
-      });
+            );
+          }
+        });
   }
 
 
