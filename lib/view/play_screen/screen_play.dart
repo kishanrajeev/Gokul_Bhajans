@@ -58,11 +58,20 @@ class _PlayContainerState extends State<PlayContainer> {
     await Future.delayed(Duration(milliseconds: 300));
     String? title = realtimePlayingInfos1!.current!.audio.audio.metas.title.toString();
     String first4 = title!.substring(0, 4);
-    String textData =
-    await DefaultAssetBundle.of(context).loadString('assets/bhajan-lyrics/$first4.txt');
+    String textData;
+
+    if (first4.startsWith('N')) {
+      textData = await DefaultAssetBundle.of(context).loadString('assets/bhajan-lyrics/N.txt');
+    } else if (first4.startsWith('M')) {
+      textData = await DefaultAssetBundle.of(context).loadString('assets/bhajan-lyrics/M.txt');
+    } else {
+      textData = await DefaultAssetBundle.of(context).loadString('assets/bhajan-lyrics/$first4.txt');
+    }
+
     print('KYS $textData');
     return textData;
   }
+
 
   void someFunction() async {
     String updatedTextData = await loadTextData(context);
