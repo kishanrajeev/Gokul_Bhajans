@@ -68,7 +68,7 @@ class _PlayContainerState extends State<PlayContainer> {
       textData = await DefaultAssetBundle.of(context).loadString('assets/bhajan-lyrics/$first4.txt');
     }
 
-    print('KYS $textData');
+    print('$textData');
     return textData;
   }
 
