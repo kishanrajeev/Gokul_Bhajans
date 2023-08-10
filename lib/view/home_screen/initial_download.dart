@@ -19,7 +19,7 @@ class InDownloadPage extends StatefulWidget {
 
 class _SingleDownloadScreenState extends State<InDownloadPage> {
   final List<String> urls = [
-    "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B%2133810&authkey=!AJl_l6B0L--wyAc",//"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114910&authkey=AOtKN7rQOBPVe9A", // URL 1
+    "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B%2133810&authkey=!AJl_l6B0L--wyAc", //"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114910&authkey=AOtKN7rQOBPVe9A", // URL 1
     "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B!33812&authkey=!AHEgu04o0u7YePA",//"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114911&authkey=ABcUkgf9iMpAZ_k", // URL 2
     "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B%2133809&authkey=!ADyaURyLCbftc10",//"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114909&authkey=AO_DEAyqrBTzlF8", // URL 3
     "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B%2133811&authkey=!ADIPg996MymIQBk",//"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114912&authkey=ADPG7V9RFoNxEZo", // URL 4
