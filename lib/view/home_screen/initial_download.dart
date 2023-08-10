@@ -19,17 +19,17 @@ class InDownloadPage extends StatefulWidget {
 
 class _SingleDownloadScreenState extends State<InDownloadPage> {
   final List<String> urls = [
-    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114910&authkey=AOtKN7rQOBPVe9A", // URL 1
-    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114911&authkey=ABcUkgf9iMpAZ_k", // URL 2
-    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114909&authkey=AO_DEAyqrBTzlF8", // URL 3
-    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114912&authkey=ADPG7V9RFoNxEZo", // URL 4
-    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114917&authkey=AAWmZ9Wvk4N4KaE", // URL 5
-    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114914&authkey=AM3KvAXPK24AxX0", // URL 6
-    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114913&authkey=APX-98VFTzEY5qY", // URL 7
-    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114915&authkey=ANaImqZ2FPiIDM4", // URL 8
-    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114918&authkey=AGUvylyFEj6uigU", // URL 9
-    "https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114916&authkey=APrUFYmyhds1u8M", // URL 10
-  ]; // URLs to download
+    "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B%2133810&authkey=!AJl_l6B0L--wyAc",//"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114910&authkey=AOtKN7rQOBPVe9A", // URL 1
+    "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B!33812&authkey=!AHEgu04o0u7YePA",//"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114911&authkey=ABcUkgf9iMpAZ_k", // URL 2
+    "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B%2133809&authkey=!ADyaURyLCbftc10",//"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114909&authkey=AO_DEAyqrBTzlF8", // URL 3
+    "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B%2133811&authkey=!ADIPg996MymIQBk",//"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114912&authkey=ADPG7V9RFoNxEZo", // URL 4
+    "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B%2133813&authkey=!AHo3wfX0AfWeyW4",//"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114917&authkey=AAWmZ9Wvk4N4KaE", // URL 5
+    "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B%2133814&authkey=!APHBLJ_HeG-OEqk",//"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114914&authkey=AM3KvAXPK24AxX0", // URL 6
+    "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B%2133827&authkey=!ANRtOHdy6nZETHE",//"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114913&authkey=APX-98VFTzEY5qY", // URL 7
+    "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B%2133817&authkey=!AOl3W2OPGWqAUXA",//"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114915&authkey=ANaImqZ2FPiIDM4", // URL 8
+    "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B%2133818&authkey=!AOnQbobTrGMJ1yM",//"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114918&authkey=AGUvylyFEj6uigU", // URL 9
+    "https://onedrive.live.com/download?resid=4493F08A0F8CBA8B%2133820&authkey=!AAAEDv-p0FNwaNQ",//"https://onedrive.live.com/download?cid=4493F08A0F8CBA8B&resid=4493F08A0F8CBA8B%2114916&authkey=APrUFYmyhds1u8M", // URL 10
+  ];  // URLs to download
   double? _progress;
   String _status = '';
   int testnum = 1;
