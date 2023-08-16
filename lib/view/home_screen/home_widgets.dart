@@ -22,6 +22,14 @@ import 'language_page.dart';
 import 'screen_home_bottomsheet.dart';
 import 'title_page.dart';
 
+/*
+onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ScreenTitle(key: ,)),
+                          );
+
+ */
 class ScreenHome extends StatelessWidget {
   ScreenHome({super.key});
 
@@ -82,9 +90,10 @@ class ScreenHome extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ScreenTitle()),
+                          showSearch(
+                            query: '-',
+                            context: context,
+                            delegate: MusicSearch2(),
                           );
                         },
                         child: Text('By Title'),
