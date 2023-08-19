@@ -51,4 +51,4 @@ This project is being actively developed and maintained by Kishan Rajeev.
 
 ## License
 
-SmartSnap is licensed under the MIT License.
+GokulBhajans is licensed under the MIT License.
