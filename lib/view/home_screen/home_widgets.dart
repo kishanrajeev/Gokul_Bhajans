@@ -12,6 +12,7 @@ import '../playlist_screen/screen_playlist.dart';
 import '../screen_search/screen_search.dart';
 import '../screen_search/screen_search1.dart';
 import '../screen_search/search_screen2.dart';
+import '../screen_search/search_screen3.dart';
 import '../widgets.dart';
 import 'author_home.dart';
 import 'catagory_home.dart';

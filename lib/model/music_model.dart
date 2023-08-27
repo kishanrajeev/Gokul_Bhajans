@@ -3,13 +3,17 @@ part 'music_model.g.dart';
 
 @HiveType(typeId: 1)
 class MusicModel {
-  MusicModel({this.id, this.path, this.title, this.artist});
+  var directory;
+
+  MusicModel({this.id, this.path, this.title, this.artist, this.directory});
 
   MusicModel.fromJson(Map<dynamic, String> json) {
     id = json['id'];
     path = json['path'];
     title = json['title'];
     artist = json['artist'];
+    directory = json['directory'];
+
   }
   @HiveField(0)
   String? id;

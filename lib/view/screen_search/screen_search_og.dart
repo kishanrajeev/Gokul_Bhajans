@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -12,6 +14,8 @@ import '../favourite_screen/screen_favourite.dart';
 import '../home_screen/screen_home_bottomsheet.dart';
 import '../play_screen/screen_play.dart';
 import '../widgets.dart';
+import 'package:external_path/external_path.dart';
+
 
 
 class MusicSearch extends SearchDelegate<dynamic> {
@@ -19,6 +23,7 @@ class MusicSearch extends SearchDelegate<dynamic> {
   final HomeScreenController _homeScreenController =
   Get.put(HomeScreenController());
   final PlaylistController _playlistController = Get.put(PlaylistController());
+  final String songsDirectoryPath = '/storage/emulated/0/Music/GokulBhajans';
   @override
   List<Widget>? buildActions(BuildContext context) {
     return <Widget>[
@@ -40,16 +45,29 @@ class MusicSearch extends SearchDelegate<dynamic> {
   }
 
   @override
-  Widget buildResults(BuildContext context) {
-    final List<MusicModel> suggetionList = allAudioListFromDB
+  Widget buildSuggestions(BuildContext context) {
+    final List<MusicModel> allAudioListFromDB = fetchSongsFromDirectory();
+
+    final List<MusicModel> suggestionList = allAudioListFromDB
         .where((MusicModel element) =>
         element.title!.toLowerCase().contains(query.toLowerCase()))
         .toList();
-    return Container(
+
+    return suggestionList.isEmpty
+        ? Container(
+      color: Colors.black,
+      child: const Center(
+        child: Text(
+          'No Results Found',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    )
+        : Container(
       color: Colors.black,
       padding: const EdgeInsets.all(10),
       child: ListView.builder(
-        itemCount: suggetionList.length,
+        itemCount: suggestionList.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
             shape: RoundedRectangleBorder(
@@ -60,15 +78,16 @@ class MusicSearch extends SearchDelegate<dynamic> {
               leading: const CircleAvatar(
                 radius: 25,
                 backgroundColor: Colors.transparent,
-                backgroundImage: AssetImage('assets/images/musicIcon1.png'),
+                backgroundImage:
+                AssetImage('assets/images/musicIcon1.png'),
               ),
               title: Text(
-                suggetionList[index].title.toString(),
+                suggestionList[index].title.toString(),
                 maxLines: 1,
                 style: const TextStyle(color: Colors.white, fontSize: 15),
               ),
               subtitle: Text(
-                suggetionList[index].artist.toString(),
+                suggestionList[index].artist.toString(),
                 maxLines: 1,
                 style: const TextStyle(color: Colors.white, fontSize: 10),
               ),
@@ -85,7 +104,7 @@ class MusicSearch extends SearchDelegate<dynamic> {
                       ),
                       builder: (BuildContext ctx) {
                         return HomeBottomSheet(
-                          id: suggetionList[index].id.toString(),
+                          id: suggestionList[index].id.toString(),
                         );
                       });
                   favouritesAudioListUpdate = false;
@@ -93,7 +112,7 @@ class MusicSearch extends SearchDelegate<dynamic> {
                 },
               ),
               onTap: () async {
-                await createAudiosFileList(suggetionList);
+                await createAudiosFileList(suggestionList);
                 audioPlayer.playlistPlayAtIndex(index);
                 _homeScreenController.miniPlayerVisibility.value = true;
                 favouritesAudioListUpdate = false;
@@ -109,26 +128,19 @@ class MusicSearch extends SearchDelegate<dynamic> {
   }
 
   @override
-  Widget buildSuggestions(BuildContext context) {
-    final List<MusicModel> suggetionList = allAudioListFromDB
+  Widget buildResults(BuildContext context) {
+    final List<MusicModel> allAudioListFromDB = fetchSongsFromDirectory();
+
+    final List<MusicModel> suggestionList = allAudioListFromDB
         .where((MusicModel element) =>
         element.title!.toLowerCase().contains(query.toLowerCase()))
         .toList();
-    return suggetionList.isEmpty
-        ? Container(
-      color: Colors.black,
-      child: const Center(
-        child: Text(
-          'No Results Found',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-    )
-        : Container(
+
+    return Container(
       color: Colors.black,
       padding: const EdgeInsets.all(10),
       child: ListView.builder(
-        itemCount: suggetionList.length,
+        itemCount: suggestionList.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
             shape: RoundedRectangleBorder(
@@ -139,16 +151,15 @@ class MusicSearch extends SearchDelegate<dynamic> {
               leading: const CircleAvatar(
                 radius: 25,
                 backgroundColor: Colors.transparent,
-                backgroundImage:
-                AssetImage('assets/images/musicIcon1.png'),
+                backgroundImage: AssetImage('assets/images/musicIcon1.png'),
               ),
               title: Text(
-                suggetionList[index].title.toString(),
+                suggestionList[index].title.toString(),
                 maxLines: 1,
                 style: const TextStyle(color: Colors.white, fontSize: 15),
               ),
               subtitle: Text(
-                suggetionList[index].artist.toString(),
+                suggestionList[index].artist.toString(),
                 maxLines: 1,
                 style: const TextStyle(color: Colors.white, fontSize: 10),
               ),
@@ -165,13 +176,15 @@ class MusicSearch extends SearchDelegate<dynamic> {
                       ),
                       builder: (BuildContext ctx) {
                         return HomeBottomSheet(
-                          id: suggetionList[index].id.toString(),
+                          id: suggestionList[index].id.toString(),
                         );
                       });
+                  favouritesAudioListUpdate = false;
+                  _playlistController.playlistAudioListUpdate = false;
                 },
               ),
               onTap: () async {
-                await createAudiosFileList(suggetionList);
+                await createAudiosFileList(suggestionList);
                 audioPlayer.playlistPlayAtIndex(index);
                 _homeScreenController.miniPlayerVisibility.value = true;
                 favouritesAudioListUpdate = false;
@@ -184,6 +197,29 @@ class MusicSearch extends SearchDelegate<dynamic> {
         },
       ),
     );
+  }
+
+
+  List<MusicModel> fetchSongsFromDirectory() {
+    // Get a list of files in the specific directory
+    Directory songsDirectory = Directory(songsDirectoryPath);
+    List<FileSystemEntity> files = songsDirectory.listSync();
+
+    // Filter the files to include only audio files
+    List<File> audioFiles = files
+        .where((file) => file is File && file.path.endsWith('.mp3'))
+        .map((file) => file as File)
+        .toList();
+    print(files);
+
+    // Convert the audio files to MusicModel objects
+    List<MusicModel> songs = audioFiles.map((file) {
+      String title = file.path.split('/').last;
+      return MusicModel(title: title, artist: 'Unknown');
+
+    }).toList();
+
+    return songs;
   }
 
   @override

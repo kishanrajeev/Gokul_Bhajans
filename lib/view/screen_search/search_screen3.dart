@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -14,11 +16,14 @@ import '../play_screen/screen_play.dart';
 import '../widgets.dart';
 
 
-class MusicSearch extends SearchDelegate<dynamic> {
+class MusicSearch3 extends SearchDelegate<dynamic> {
   @override
   final HomeScreenController _homeScreenController =
   Get.put(HomeScreenController());
   final PlaylistController _playlistController = Get.put(PlaylistController());
+  final FocusNode _focusNode = FocusNode();
+  final String songsDirectoryPath = '/storage/emulated/0/Music/GokulBhajans';
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return <Widget>[
@@ -31,6 +36,7 @@ class MusicSearch extends SearchDelegate<dynamic> {
   }
 
   @override
+  String get searchFieldLabel => 'Alphabet Search';
   Widget? buildLeading(BuildContext context) {
     return IconButton(
         onPressed: () {
@@ -41,6 +47,7 @@ class MusicSearch extends SearchDelegate<dynamic> {
 
   @override
   Widget buildResults(BuildContext context) {
+    final List<MusicModel> allAudioListFromDB = fetchSongsFromDirectory();
     final List<MusicModel> suggetionList = allAudioListFromDB
         .where((MusicModel element) =>
         element.title!.toLowerCase().contains(query.toLowerCase()))
@@ -110,6 +117,9 @@ class MusicSearch extends SearchDelegate<dynamic> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    final List<MusicModel> allAudioListFromDB = fetchSongsFromDirectory();
+    final _focusNode = FocusScope.of(context);
+    _focusNode.unfocus();
     final List<MusicModel> suggetionList = allAudioListFromDB
         .where((MusicModel element) =>
         element.title!.toLowerCase().contains(query.toLowerCase()))
@@ -185,12 +195,33 @@ class MusicSearch extends SearchDelegate<dynamic> {
       ),
     );
   }
+  List<MusicModel> fetchSongsFromDirectory() {
+    Directory songsDirectory = Directory(songsDirectoryPath);
+    if (!songsDirectory.existsSync()) {
+      return [];
+    }
+
+    List<FileSystemEntity> files = songsDirectory.listSync();
+    List<File> audioFiles = files
+        .where((file) => file is File && file.path.endsWith('.mp3'))
+        .map((file) => file as File)
+        .toList();
+
+    List<MusicModel> songs = audioFiles.map((file) {
+      String title = file.path.split('/').last;
+      print('Title: $title');
+      return MusicModel(title: title, artist: 'Unknown');
+    }).toList();
+
+    return songs;
+  }
+
 
   @override
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
       appBarTheme: const AppBarTheme(backgroundColor: kAppbarColor),
-      textTheme: const TextTheme(headline6: TextStyle(color: Colors.white)),
+      textTheme: const TextTheme(headline6: TextStyle(color: kAppbarColor)),
       textSelectionTheme:
       const TextSelectionThemeData(cursorColor: Colors.white),
       hintColor: Colors.white,
